@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
-import SearchBar from './SearchBar/SearchBar';
-import Results from './Results/Results';
-import NewPlaylist from './NewPlaylist/NewPlaylist';
+import SearchBar from './SearchBar/SearchBar.js';
+import Results from './Results/Results.js';
+import NewPlaylist from './NewPlaylist/NewPlaylist.js';
+import Spotify from './util/Spotify.js';
 
 //The App. Here we render the relevant HTML. This is the root.
 function App() {
@@ -73,6 +74,7 @@ function App() {
   const [searchResults,setSearchResults]=useState(tracks);
   const [playlistSongs,setPlaylistSongs]=useState([]);
   const [playlistName,setPlaylistName]=useState("");
+  const[searchedTerm,setSearchedTerm]=useState("");
 
   //Add
   function onAdd(song){
@@ -99,11 +101,21 @@ function App() {
     setPlaylistName(e.target.value);
   };
 
+  //Search
+  function onSearch(){
+    Spotify.search(searchedTerm);
+  }
+
+  //OnChangeSearchedTerm
+  function onChangeSearchedTerm(e){
+    setSearchedTerm(e.target.value);
+  }
+
   //0. Check how everything is being rendered.
   return (
     <>
       <h1>Jammming</h1>
-      < SearchBar />
+      < SearchBar onClick={onSearch} onChange={onChangeSearchedTerm} searchedTerm={searchedTerm}/>
       < Results arrayOfResults={searchResults} onAdd={onAdd}/>
       < NewPlaylist playlistSongs={playlistSongs} onSave={onSave} playlistName={playlistName} onChange={onChangePlaylistName} onRemove={onRemove}/>
     </>

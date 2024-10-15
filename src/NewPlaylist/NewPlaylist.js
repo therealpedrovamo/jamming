@@ -1,5 +1,5 @@
 import React from "react";
-import TrackList from "../Tracklist/Tracklist";
+import TrackList from "../Tracklist/Tracklist.js";
 
 function NewPlaylist(props){
     return(
