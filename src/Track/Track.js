@@ -1,14 +1,23 @@
 import React from 'react';
 
 function Track(props){
+    //Necessary to make it work
+    function addTrack(){
+        props.onAdd(props.song);
+    };
+
+    function removeTrack(){
+        props.onRemove(props.song);
+    };
+
     const button =()=>{
         if (props.action==='add'){
             return(
-                <input type='button' value="+" />
+                <input type='button' value="+" onClick={addTrack}/>
             )
         }else{
             return (
-                <input type='button' value="x" />
+                <input type='button' value="x" onClick={removeTrack}/>
             )
         }
     };

@@ -71,36 +71,43 @@ function App() {
   ];*/
 
   const [searchResults,setSearchResults]=useState(tracks);
-  const [playlistSongs,setPlaylistSongs]=useState(playlistSongos);
+  const [playlistSongs,setPlaylistSongs]=useState([]);
   const [playlistName,setPlaylistName]=useState("");
 
   //Add
-  function onAdd(){
-    
+  function onAdd(song){
+    if((playlistSongs.some((addedSong)=> addedSong.id===song.id))===false){
+      setPlaylistSongs((prev)=>[...prev,song]);
+    }
+  };
+
+  //Remove
+  function onRemove(song){
+    setPlaylistSongs((prev)=>prev.splice(prev.indexOf(song),1));
   }
 
   //Save
   function onSave(){
-    const uris=playlistSongos.map((song)=>song.uri);
+    const uris=playlistSongs.map((song)=>song.uri);
     setPlaylistName("");
     setPlaylistSongs([]);
     alert(uris);
-  }
+  };
 
   //Playlist name
   function onChangePlaylistName(e){
     setPlaylistName(e.target.value);
-  }
+  };
 
   //0. Check how everything is being rendered.
   return (
     <>
       <h1>Jammming</h1>
       < SearchBar />
-      < Results arrayOfResults={searchResults}/>
-      < NewPlaylist playlistSongs={playlistSongs} onSave={onSave} playlistName={playlistName} onChange={onChangePlaylistName}/>
+      < Results arrayOfResults={searchResults} onAdd={onAdd}/>
+      < NewPlaylist playlistSongs={playlistSongs} onSave={onSave} playlistName={playlistName} onChange={onChangePlaylistName} onRemove={onRemove}/>
     </>
   );
-}
+};
 
 export default App;

@@ -5,7 +5,7 @@ function NewPlaylist(props){
     return(
         <>
             <input type='text' placeholder='New playlist' value={props.playlistName} onChange={props.onChange}/>
-            <TrackList songsArray={props.playlistSongs} action='remove'/>
+            <TrackList songsArray={props.playlistSongs} action='remove' onRemove={props.onRemove}/>
             <input type='button' value='Save' onClick={props.onSave}/>
         </>
     )

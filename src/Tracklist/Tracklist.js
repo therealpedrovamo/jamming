@@ -7,7 +7,7 @@ function TrackList(props){
             {
                 props.songsArray.map((song)=>{
                     return(
-                        <Track song={song} action={props.action}/>
+                        <Track song={song} action={props.action} onAdd={props.onAdd} onRemove={props.onRemove}/>
                     )
                 })
             }

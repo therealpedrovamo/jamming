@@ -5,7 +5,7 @@ function Results(props){
     return(
         <>
             <h2>Results</h2>
-            <TrackList songsArray={props.arrayOfResults} action='add'/>
+            <TrackList songsArray={props.arrayOfResults} action='add' onAdd={props.onAdd}/>
         </>
     )
 }
