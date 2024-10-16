@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import SearchBar from './SearchBar/SearchBar.js';
 import Results from './Results/Results.js';
@@ -8,7 +8,7 @@ import Spotify from './util/Spotify.js';
 //The App. Here we render the relevant HTML. This is the root.
 function App() {
   //1. We need to check how to pass data from the root component to the child components. Check if the playlists are shown.
-  let tracks=[
+    /*let tracks=[
     {
       name: 'The Spins',
       artist: 'Mac Miller, Empire of The Sun',
@@ -45,7 +45,7 @@ function App() {
       uri: 'popop'
     }
   ];
-  /*
+
   let playlistSongos=[
     {
       name: 'Around The World',
@@ -71,7 +71,7 @@ function App() {
 
   ];*/
 
-  const [searchResults,setSearchResults]=useState(tracks);
+  const [searchResults,setSearchResults]=useState([]);
   const [playlistSongs,setPlaylistSongs]=useState([]);
   const [playlistName,setPlaylistName]=useState("");
   const[searchedTerm,setSearchedTerm]=useState("");
@@ -104,18 +104,22 @@ function App() {
   //Search
   function onSearch(){
     Spotify.search(searchedTerm);
-  }
+  };
 
   //OnChangeSearchedTerm
   function onChangeSearchedTerm(e){
     setSearchedTerm(e.target.value);
-  }
+  };
+
+  useEffect(()=>{
+    Spotify.handleRedirect();
+  },[]);
 
   //0. Check how everything is being rendered.
   return (
     <>
       <h1>Jammming</h1>
-      < SearchBar onClick={onSearch} onChange={onChangeSearchedTerm} searchedTerm={searchedTerm}/>
+      < SearchBar onSearch={onSearch} onChange={onChangeSearchedTerm} searchedTerm={searchedTerm}/>
       < Results arrayOfResults={searchResults} onAdd={onAdd}/>
       < NewPlaylist playlistSongs={playlistSongs} onSave={onSave} playlistName={playlistName} onChange={onChangePlaylistName} onRemove={onRemove}/>
     </>
