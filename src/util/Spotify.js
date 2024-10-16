@@ -15,24 +15,39 @@ const Spotify={
     handleRedirect(){
         if(!accessToken && window.location.href.includes('access_token=')){
             accessToken=window.location.href.match(/access_token=([^&]*)/)[1];
+        }else if(!accessToken && !window.location.href.includes('access_token')){
+            Spotify.getAccessToken();
         }
     },
     search(term){
-        Spotify.getAccessToken();
-        //fetch get
-        let urlToSearch=`https://api.spotify.com/v1/search?q=${term}&type=album%2Cartist%2Ctrack&limit=10&offset=5'`;
-        fetch(urlToSearch,{
+        let urlToSearch=`https://api.spotify.com/v1/search?q=${term}&type=track&limit=5&offset=5`;
+        //fetch uses return to get the result of the promise
+        return fetch(urlToSearch, { //sends request
+            //We use the headers as stated in the Spotify API documentation
             headers: {
             Authorization: `Bearer ${accessToken}`
           }}).then(response=>{
+            //Converts response to JSON or JS Object Notation
             if(response.ok){
                 return response.json();
             }
-            throw new Error('Search failed :(');
-        }, networkError => alert(networkError.message)
-    ).then(jsonResponse =>{
-        alert(jsonResponse);
-    });
+            //Handles error
+            throw new Error ('Search failed');
+            }, networkError => console.log(networkError.message)
+            //Handle success
+        ).then(jsonResponse =>{
+            if (!jsonResponse.tracks) {
+                return [];
+              }
+              //It returns a new array of an object composed by id, name, artist, album and uri. 
+            return jsonResponse.tracks.items.map(track => ({ //In tracks, item is an array of tracks objects, that why we use the .map here
+                id: track.id,
+                name: track.name,
+                artist: track.artists[0].name,
+                album: track.album.name,
+                uri: track.uri
+              }));
+        })
     }
 
 };

@@ -103,7 +103,7 @@ function App() {
 
   //Search
   function onSearch(){
-    Spotify.search(searchedTerm);
+    Spotify.search(searchedTerm).then(setSearchResults);
   };
 
   //OnChangeSearchedTerm
