@@ -48,6 +48,61 @@ const Spotify={
                 uri: track.uri
               }));
         })
+    },
+    save(name,uris){
+        //Obtener user id
+        let urlToGetUserId='https://api.spotify.com/v1/me';
+        let userId;
+        return fetch(urlToGetUserId, { //sends request
+            //We use the headers as stated in the Spotify API documentation
+            headers: {
+            Authorization: `Bearer ${accessToken}`
+          }}).then(response=>{
+            //Converts response to JSON or JS Object Notation
+            if(response.ok){
+                return response.json();
+            }
+            //Handles error
+            throw new Error ('User not found');
+            }, networkError => console.log(networkError.message)
+            //Handle success
+        ).then(jsonResponse =>{
+            //It returns a user. We need the id. 
+            userId=jsonResponse.id;
+            //Create playlist
+            fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,{
+                headers: {
+                Authorization: `Bearer ${accessToken}`}, 
+                method: 'POST', 
+                body: JSON.stringify({name:name})
+            }).then(response=>{
+                if(response.ok){
+                    return response.json();
+                }
+                throw new Error ('Creation failed');
+            }, networkError => console.log(networkError.message)
+        ).then(jsonResponse =>{
+            //The response is a playlist. We need the id to add the songs
+            const playlistId=jsonResponse.id;
+            //Add songs to playlist
+            fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`,{
+                headers: {
+                Authorization: `Bearer ${accessToken}`}, 
+                method: 'POST', 
+                body: JSON.stringify({uris:uris})
+            }).then(response=>{
+                if(response.ok){
+                    return response.json();
+                }
+                throw new Error ('Addition failed');
+            }, networkError => console.log(networkError.message)
+        ).then(jsonResponse =>{
+            alert("Playlist created");
+        })
+        })
+        });
+
+        //Agregar canciones a la playlist
     }
 
 };

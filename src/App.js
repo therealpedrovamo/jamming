@@ -93,7 +93,7 @@ function App() {
     const uris=playlistSongs.map((song)=>song.uri);
     setPlaylistName("");
     setPlaylistSongs([]);
-    alert(uris);
+    Spotify.save(playlistName,uris);
   };
 
   //Playlist name
